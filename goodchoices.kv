@@ -1,2 +1,39 @@
 #:kivy 1.0.9
 
+<GoodChoicesWidget>:
+
+
+<GoodChoicesChore>:
+    BoxLayout:
+        orientation: 'vertical'
+        TextInput:
+            id: user_input
+            size_hint_x: 1
+            size_hint_y: None
+            pos_hint: {'center_x': 0.5}
+            text: 'Here is a chore'
+            multiline: False
+
+    BoxLayout:
+        Button:
+            id: add_to_chorelist 
+            text: "Add Chore" 
+            size_hint_x: 1
+            size_hint_y: None
+            pos_hint: {'center_x': 0.8}
+            on_release: root.callback()
+
+<GoodChoicesList>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            id: chore_list
+            #text: root.new_chorelist 
+            size_hint_y: None
+    BoxLayout:
+        ToggleButton:
+            id: completed
+            text: "Completed"
+            size_hint_y: None
+
+        
