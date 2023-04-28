@@ -1,2 +1,194 @@
-#:kivy 1.0.9
+#:kivy 2.0.0
+#:import Factory kivy.factory.Factory
 
+<Screen>:
+    canvas:
+        Color:
+            rgb: .2, .2, .2
+        Rectangle:
+            size: self.size 
+
+<MutableLabelTextInput@MutableTextInput>:
+    Label:
+        id: w_label 
+        pos: root.pos 
+        text: root.text 
+
+    TextInput:
+        id: w_textinput
+        pos: root.pos
+        text: root.text
+        on_focus: root.check_focus_and_view(self)
+
+<GoodChoicesView>:
+    on_chore_description: app.set_chore_description(self.chore_index, self.chore_description)
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: '48dp'
+            padding: '5dp'
+
+            canvas:
+                Color:
+                    rgb: .3, .3, .3
+                Rectangle:
+                    pos: self.pos 
+                    size: self.size 
+
+            Button:
+                text: 'Home'
+                size_hint_x: 0.2
+                width: self.height 
+                on_release: app.go_chores() 
+            
+            MutableLabelTextInput:
+                text: root.chore_description 
+                font_size: '16sp'
+                multiline: False 
+                on_text: root.chore_description = self.text 
+
+            Button:
+                text: 'Delete chore'
+                size_hint_x: 0.2 
+                width: self.height 
+                on_release: app.del_chore(root.chore_index)
+
+<GoodChoicesChore>:
+    height: '48sp'
+    size_hint_y: None
+    orientation: 'horizontal'
+
+    canvas:
+        Color:
+            rgb: .3, .3, .3 
+        Rectangle:
+            pos: self.pos 
+            size: self.width, 1 
+    
+    BoxLayout:
+        padding: '5dp'
+
+        Button:
+            text: 'Edit chore'
+            size_hint_x: 0.2 
+            width: self.height
+            on_release: app.edit_chore(root.chore_index) 
+
+        Label:
+            text: root.chore_description 
+            
+        ToggleButton:
+            text: 'Completed'
+            size_hint_x: 0.5 
+            width: self.height
+            on_release: app.celebrate()
+
+<CelebrateView>:
+
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: None 
+        size_hint_x: None
+
+        AnimText:
+            canvas:
+                Color:
+                    rgb: .7, .7, .7
+                Rectangle:
+                    pos: self.pos 
+                    size: 100, 100
+    Label:
+        text: root.affirm 
+        font_size: '32sp'
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: '48dp'
+            padding: '5dp'
+
+            canvas:
+                Color:
+                    rgb: .3, .3, .3
+                Rectangle:
+                    pos: self.pos 
+                    size: self.size
+
+            Button:
+                text: 'Home'
+                size_hint_x: 0.5
+                width: self.height 
+                on_release: app.go_chores() 
+
+<GoodChoices>:
+    BoxLayout:
+        orientation: 'vertical'
+    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None 
+            height: '48dp'
+            padding: '5dp'
+
+            canvas:
+                Color:
+                    rgb: .3, .3, .3
+                Rectangle:
+                    pos: self.pos 
+                    size: self.size 
+            
+            Image:
+                source: 'data/IMG_5987.jpg'
+                mipmap: True 
+                size_hint_x: None 
+                width: self.height 
+            
+            Label:
+                text: 'Chores' 
+                font_size: '24sp'
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None 
+            height: '48dp'
+            padding: '5dp'
+
+            canvas:
+                Color:
+                    rgb: .3, .3, .3
+                Rectangle:
+                    pos: self.pos 
+                    size: self.size
+    
+            Button:
+                text: 'Add a chore' 
+                size_hint_x: 0.5
+                width: self.height 
+                on_release: app.add_chore() 
+
+            Button:
+                text: 'Reset Chores'
+                size_hint_x: 0.5
+                width: self.height 
+                #on_release: app.reset_completed
+            
+        RecycleView:
+            data: root.data_for_widgets 
+            viewclass: 'GoodChoicesChore'
+
+            RecycleBoxLayout:
+                default_size: None, dp(56)
+                default_size_hint: 1, None 
+                size_hint_y: None 
+                height: self.minimum_height 
+                orientation: 'vertical' 
+                spacing: dp(2)
+
+            
+
+
+        
