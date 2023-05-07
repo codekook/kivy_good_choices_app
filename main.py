@@ -17,6 +17,7 @@ from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.properties import AliasProperty, StringProperty, ListProperty, NumericProperty, BooleanProperty
 from kivy.clock import Clock
+from kivy.animation import Animation 
 from random import randint
 
 #adds the interactive functionality to each element of the graphical interface 
@@ -85,11 +86,11 @@ class GoodChoicesView(Screen):
     chore_description = StringProperty()
 
 class CelebrateView(Screen):
-     
-    affirm = StringProperty()
+    
+    pass 
 
 class AnimText(Widget):
-    #affirm = StringProperty()
+    
     velocity = ListProperty([10, 15])
 
     # schedule the updated position, check very rapid periodicty
@@ -176,13 +177,20 @@ class GoodChoicesApp(App):
     @property #adds additional getter and setter functionality to chores_fn()
     def chores_fn(self):
         return join(self.user_data_dir, 'chores.json')
-
+    
     def affirmation(self):
         affirmations = ["Good job!", "Awesome!", "Thank you!", "Keep it up!",
                         "Great work!", "Well done!", "Fabulous!", "Crushing it!"]
         num = randint(0, len(affirmations) - 1)
-        self.root.affirm = affirmations[num]
-        return self.root.affirm
+        self.affirm = affirmations[num]
+        return self.affirm
+    
+    def animate(self, instance):
+        animation = Animation(d = 5.0, 
+                            s = 1/60,
+                            t = 'in_out_bounce')
+        
+        animation.start(instance)
 
     def celebrate(self):
         name = "first_affirm"
@@ -191,9 +199,8 @@ class GoodChoicesApp(App):
             self.root.remove_widget(self.root.get_screen(name))
 
         view = CelebrateView(
-            name = name, 
-            affirm = self.affirmation())
-            
+                name = name)
+                     
         self.root.add_widget(view)
         self.transition.direction = 'left'
         self.root.current = view.name

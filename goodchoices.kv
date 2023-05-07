@@ -100,9 +100,16 @@
                     rgb: .7, .7, .7
                 Rectangle:
                     pos: self.pos 
-                    size: 100, 100
+                    size: 400, 100
+            
+        Button:
+            id: anim_button
+            text: 'Future animation'
+            font_size: '32sp'
+            on_press: app.animate(id)
+
     Label:
-        text: root.affirm 
+        text: app.affirmation()
         font_size: '32sp'
 
         BoxLayout:
