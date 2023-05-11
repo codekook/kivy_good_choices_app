@@ -93,24 +93,11 @@
         orientation: 'vertical'
         size_hint_y: None 
         size_hint_x: None
-
-        AnimText:
-            canvas:
-                Color:
-                    rgb: .7, .7, .7
-                Rectangle:
-                    pos: self.pos 
-                    size: 400, 100
-            
-        Button:
-            id: anim_button
-            text: 'Future animation'
-            font_size: '32sp'
-            on_press: app.animate(id)
-
+        
     Label:
         text: app.affirmation()
         font_size: '32sp'
+        on_kv_post: app.animate_it(self)
 
         BoxLayout:
             orientation: 'horizontal'

@@ -14,7 +14,6 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 from kivy.uix.widget import Widget
-from kivy.core.window import Window
 from kivy.properties import AliasProperty, StringProperty, ListProperty, NumericProperty, BooleanProperty
 from kivy.clock import Clock
 from kivy.animation import Animation 
@@ -86,27 +85,8 @@ class GoodChoicesView(Screen):
     chore_description = StringProperty()
 
 class CelebrateView(Screen):
-    
-    pass 
 
-class AnimText(Widget):
-    
-    velocity = ListProperty([10, 15])
-
-    # schedule the updated position, check very rapid periodicty
-    def __init__(self, **kwargs):
-        super(AnimText, self).__init__(**kwargs)
-        Clock.schedule_interval(self.update, 1/60)
-
-    def update(self, *args):
-        self.x += self.velocity[0]
-        self.y += self.velocity[1]
-
-        # bouncing the block off the application window- x and y directions
-        if self.x < 0 or (self.x + self.width) > Window.width:
-            self.velocity[0] *= -1
-        if self.y < 0 or (self.y + self.height) > Window.height:
-            self.velocity[1] *= -1
+    pass
 
 class GoodChoicesApp(App):
 
@@ -185,21 +165,36 @@ class GoodChoicesApp(App):
         self.affirm = affirmations[num]
         return self.affirm
     
-    def animate(self, instance):
-        animation = Animation(d = 5.0, 
-                            s = 1/60,
-                            t = 'in_out_bounce')
+    def animate_it(self, instance):
+        print(self.root.width)
+        print(self.root.height)
+        x = randint(0, self.root.width)
+        y = randint(0, self.root.height)
+        print("x: ", x, "y: ", y)
+        animation = Animation(d = 3.0, 
+                        pos = (x, y),
+                        )
+
+        x = randint(0, self.root.width)
+        y = randint(0, self.root.height)
+        print("x: ", x, "y: ", y)
+        animation += Animation(d=3.0,
+                              pos=(x, y),
+                              )
+
+        animation += Animation(d = 3.0, 
+                        pos = (100, 100), 
+                        t = 'out_bounce'
+                        )
+
         
         animation.start(instance)
 
     def celebrate(self):
-        name = "first_affirm"
+        #if self.root.has_screen(name):
+            #self.root.remove_widget(self.root.get_screen(name))
 
-        if self.root.has_screen(name):
-            self.root.remove_widget(self.root.get_screen(name))
-
-        view = CelebrateView(
-                name = name)
+        view = CelebrateView()
                      
         self.root.add_widget(view)
         self.transition.direction = 'left'
