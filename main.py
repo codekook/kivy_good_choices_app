@@ -14,9 +14,9 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 from kivy.uix.widget import Widget
-from kivy.core.window import Window
 from kivy.properties import AliasProperty, StringProperty, ListProperty, NumericProperty, BooleanProperty
 from kivy.clock import Clock
+from kivy.animation import Animation 
 from random import randint
 
 #adds the interactive functionality to each element of the graphical interface 
@@ -78,34 +78,14 @@ class GoodChoicesChore(BoxLayout):
     chore_index = NumericProperty()
     chore_description = StringProperty()
 
-
 class GoodChoicesView(Screen):
 
     chore_index = NumericProperty()
     chore_description = StringProperty()
 
 class CelebrateView(Screen):
-     
-    affirm = StringProperty()
 
-class AnimText(Widget):
-    #affirm = StringProperty()
-    velocity = ListProperty([10, 15])
-
-    # schedule the updated position, check very rapid periodicty
-    def __init__(self, **kwargs):
-        super(AnimText, self).__init__(**kwargs)
-        Clock.schedule_interval(self.update, 1/60)
-
-    def update(self, *args):
-        self.x += self.velocity[0]
-        self.y += self.velocity[1]
-
-        # bouncing the block off the application window- x and y directions
-        if self.x < 0 or (self.x + self.width) > Window.width:
-            self.velocity[0] *= -1
-        if self.y < 0 or (self.y + self.height) > Window.height:
-            self.velocity[1] *= -1
+    pass
 
 class GoodChoicesApp(App):
 
@@ -140,7 +120,7 @@ class GoodChoicesApp(App):
         chore = self.chores.data[chore_index]
         name = 'chore{}'.format(chore_index)
 
-        #not sure what  this check does???
+        #not sure what  this check does??
         if self.root.has_screen(name):
             self.root.remove_widget(self.root.get_screen(name)) 
 
@@ -158,6 +138,14 @@ class GoodChoicesApp(App):
         self.chores.data.append({'description': 'New chore (double click)'})
         chore_index = len(self.chores.data) - 1 
         self.edit_chore(chore_index) 
+    
+    def reset_all_chores(self):
+        #iterate over all the togglebuttons
+        #retrieve the togglebutton state as complete or incomplete
+        #set value to the current state of the togglebutton
+        #if the value is equivalent to the complete state, reset the toggle button to incomplete
+        if value == "complete":
+            pass 
 
     def set_chore_description(self, chore_index, chore_description):
         self.chores.data[chore_index]['description'] = chore_description 
@@ -176,24 +164,49 @@ class GoodChoicesApp(App):
     @property #adds additional getter and setter functionality to chores_fn()
     def chores_fn(self):
         return join(self.user_data_dir, 'chores.json')
-
+    
     def affirmation(self):
         affirmations = ["Good job!", "Awesome!", "Thank you!", "Keep it up!",
                         "Great work!", "Well done!", "Fabulous!", "Crushing it!"]
         num = randint(0, len(affirmations) - 1)
-        self.root.affirm = affirmations[num]
-        return self.root.affirm
+        self.affirm = affirmations[num]
+        return self.affirm
+    
+    def animate_it(self, instance):
+        
+        x = randint(0, self.root.width - 600)
+        y = randint(0, self.root.height - 600)
+        animation = Animation(d = 1.0, 
+                        pos = (x, y),
+                        )
+
+        x = randint(0, self.root.width - 600)
+        y = randint(0, self.root.height - 600)
+        animation += Animation(d=1.0,
+                              pos=(x, y),
+                              )
+
+        x = randint(0, self.root.width - 600)
+        y = randint(0, self.root.height - 600)
+        animation += Animation(d=1.0,
+                               pos=(x, y),
+                               )
+
+        animation += Animation(d = 1.0, 
+                        pos = (0, 600), 
+                        t = 'out_bounce'
+                        )
+
+        animation.start(instance)
 
     def celebrate(self):
-        name = "first_affirm"
+        name = "celebrate_view"
 
         if self.root.has_screen(name):
             self.root.remove_widget(self.root.get_screen(name))
 
-        view = CelebrateView(
-            name = name, 
-            affirm = self.affirmation())
-            
+        view = CelebrateView(name = name)
+                     
         self.root.add_widget(view)
         self.transition.direction = 'left'
         self.root.current = view.name
