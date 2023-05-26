@@ -82,41 +82,40 @@
             text: root.chore_description 
             
         ToggleButton:
+            id: chore_status
             text: 'Completed'
             size_hint_x: 0.5 
             width: self.height
             on_release: app.celebrate()
 
 <CelebrateView>:
-
-    BoxLayout:
-        orientation: 'vertical'
-        size_hint_y: None 
-        size_hint_x: None
+    height: '48sp'
+    size_hint_y: None
+    orientation: 'horizontal'
         
     Label:
         text: app.affirmation()
         font_size: '32sp'
         on_kv_post: app.animate_it(self)
 
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: None
-            height: '48dp'
-            padding: '5dp'
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: '48dp'
+        padding: '5dp'
 
-            canvas:
-                Color:
-                    rgb: .3, .3, .3
-                Rectangle:
-                    pos: self.pos 
-                    size: self.size
+        canvas:
+            Color:
+                rgb: .3, .3, .3
+            Rectangle:
+                pos: self.pos 
+                size: self.size
 
-            Button:
-                text: 'Home'
-                size_hint_x: 0.5
-                width: self.height 
-                on_release: app.go_chores() 
+        Button:
+            text: 'Home'
+            size_hint_x: 0.5
+            width: self.height 
+            on_release: app.go_chores() 
 
 <GoodChoices>:
     BoxLayout:
@@ -168,7 +167,7 @@
                 text: 'Reset Chores'
                 size_hint_x: 0.5
                 width: self.height 
-                #on_release: app.reset_completed
+                #on_release: app.reset_all_chores()
             
         RecycleView:
             data: root.data_for_widgets 

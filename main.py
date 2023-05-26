@@ -78,7 +78,6 @@ class GoodChoicesChore(BoxLayout):
     chore_index = NumericProperty()
     chore_description = StringProperty()
 
-
 class GoodChoicesView(Screen):
 
     chore_index = NumericProperty()
@@ -121,7 +120,7 @@ class GoodChoicesApp(App):
         chore = self.chores.data[chore_index]
         name = 'chore{}'.format(chore_index)
 
-        #not sure what  this check does???
+        #not sure what  this check does??
         if self.root.has_screen(name):
             self.root.remove_widget(self.root.get_screen(name)) 
 
@@ -139,6 +138,14 @@ class GoodChoicesApp(App):
         self.chores.data.append({'description': 'New chore (double click)'})
         chore_index = len(self.chores.data) - 1 
         self.edit_chore(chore_index) 
+    
+    def reset_all_chores(self):
+        #iterate over all the togglebuttons
+        #retrieve the togglebutton state as complete or incomplete
+        #set value to the current state of the togglebutton
+        #if the value is equivalent to the complete state, reset the toggle button to incomplete
+        if value == "complete":
+            pass 
 
     def set_chore_description(self, chore_index, chore_description):
         self.chores.data[chore_index]['description'] = chore_description 
@@ -166,35 +173,39 @@ class GoodChoicesApp(App):
         return self.affirm
     
     def animate_it(self, instance):
-        print(self.root.width)
-        print(self.root.height)
-        x = randint(0, self.root.width)
-        y = randint(0, self.root.height)
-        print("x: ", x, "y: ", y)
-        animation = Animation(d = 3.0, 
+        
+        x = randint(0, self.root.width - 600)
+        y = randint(0, self.root.height - 600)
+        animation = Animation(d = 1.0, 
                         pos = (x, y),
                         )
 
-        x = randint(0, self.root.width)
-        y = randint(0, self.root.height)
-        print("x: ", x, "y: ", y)
-        animation += Animation(d=3.0,
+        x = randint(0, self.root.width - 600)
+        y = randint(0, self.root.height - 600)
+        animation += Animation(d=1.0,
                               pos=(x, y),
                               )
 
-        animation += Animation(d = 3.0, 
-                        pos = (100, 100), 
+        x = randint(0, self.root.width - 600)
+        y = randint(0, self.root.height - 600)
+        animation += Animation(d=1.0,
+                               pos=(x, y),
+                               )
+
+        animation += Animation(d = 1.0, 
+                        pos = (0, 600), 
                         t = 'out_bounce'
                         )
 
-        
         animation.start(instance)
 
     def celebrate(self):
-        #if self.root.has_screen(name):
-            #self.root.remove_widget(self.root.get_screen(name))
+        name = "celebrate_view"
 
-        view = CelebrateView()
+        if self.root.has_screen(name):
+            self.root.remove_widget(self.root.get_screen(name))
+
+        view = CelebrateView(name = name)
                      
         self.root.add_widget(view)
         self.transition.direction = 'left'
