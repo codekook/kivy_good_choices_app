@@ -1,13 +1,46 @@
 #:kivy 2.0.0
 #:import Factory kivy.factory.Factory
 
-<GoodChoicesLayout>:
-    orientation: 'vertical'
-    Label:
-        text: "chore"
+<GoodChoicesChore>:
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.width, root.height
+        padding: '10dp'
+        canvas:
+            Color:
+                rgb: (.2, .2, .2)
+            Rectangle:
+                pos: self.pos 
+                size: self.size
+
+        Label:
+            text: "Chores"
+            id: profile_name
+            size_hint_y: None
+            size_hint_x: root.width
+            pos_hint: {'top': 0.5}
+            pos_hint: {'center_x': 0.5}
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            TextInput:
+                id: new_chore
+                multiline: False
+                size_hint_y: None
+                pos_hint: {'top': 1}
+                focus: True
+
+            Button:
+                id: chore_button
+                text: "Add a chore"
+                on_press: root.add_chore()
+                on_release: root.add_chore_list_item()
+                size_hint_y: None
+                pos_hint: {'top': 1}
 
 <AffirmationLayout>:
-    orientation: 'vertical'
+    BoxLayout:
+        orientation: 'vertical'
 
             
 
