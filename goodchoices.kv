@@ -5,7 +5,7 @@
     BoxLayout:
         orientation: 'vertical'
         size: root.width, root.height
-        padding: '10dp'
+        padding: '5dp'
         canvas:
             Color:
                 rgb: (.2, .2, .2)
@@ -17,9 +17,14 @@
             text: "Chores"
             id: profile_name
             size_hint_y: None
-            size_hint_x: root.width
-            pos_hint: {'top': 0.5}
+            pos_hint: {'top': 1}
             pos_hint: {'center_x': 0.5}
+
+        Button:
+            id: view_chore_list
+            text: "View Chore List"
+            on_press: root.manager.current = 'chorelistscreen'
+            size_hint_y: None 
         
         BoxLayout:
             orientation: 'horizontal'
@@ -34,13 +39,62 @@
                 id: chore_button
                 text: "Add a chore"
                 on_press: root.add_chore()
-                on_release: root.add_chore_list_item()
+                #on_release: root.add_chore_list()
                 size_hint_y: None
                 pos_hint: {'top': 1}
 
-<AffirmationLayout>:
+<ChoreListScreen>:
     BoxLayout:
         orientation: 'vertical'
+        size: root.width, root.height
+        padding: '5dp'
+        canvas:
+            Color:
+                rgb: (.2, .2, .2)
+            Rectangle:
+                pos: self.pos 
+                size: self.size
+        Button:
+            text: "Home"
+            on_press: root.manager.current = 'home'
+            size_hint_y: None 
+            pos_hint: {'top' : 1}
+            pos_hint: {'center_x' : 0.5}
+        BoxLayout:
+            orientation: 'horizontal'
+            Button:
+                text: "View Chores"
+                on_release: root.view_chore_list()
+                size_hint_y: None
+                pos_hint: {'top' : 1}
+            Button:
+                text: 'Reset chores'
+                on_release: root.view_chore_list() 
+                size_hint_y: None
+                pos_hint: {'top' : 1}
+
+<CelebrateScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.width, root.height
+        padding: '5dp'
+        canvas:
+            Color:
+                rgb: (.2, .2, .2)
+            Rectangle:
+                pos: self.pos 
+                size: self.size
+
+        Label:
+            text: root.affirmation()
+            font_size: '32sp'
+            on_touch_down: root.animate_it(self)
+    
+        Button:
+            text: "Home"
+            on_press: root.manager.current = 'chorelistscreen'
+            size_hint_y: None 
+            pos_hint: {'top' : 1}
 
             
 
