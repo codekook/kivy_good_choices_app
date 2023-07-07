@@ -2,6 +2,12 @@
 
 Simple application for creating chores and tracking their completion
 
+Design challenges and bugs-
+- Formatting the entire list of chores to display correctly
+- Keeping the animation to the window size 
+- Deleting chores in the list
+- Prevent mulitple "View Chores" function calls on top of one another 
+
 '''
 
 from kivy.app import App
@@ -32,7 +38,7 @@ class Profile():
 
 class GoodChoicesChore(Screen):
 
-    '''GoodChoicesChore class defines the attributes and behaviors associated with all chores'''
+    '''GoodChoicesChore class instantiates, adds, and deletes chores from a list of dictionaries'''
 
     # class list for all chores
     chore_dict_list = []
@@ -44,7 +50,7 @@ class GoodChoicesChore(Screen):
         self.__complete = False
         self.__index = 0
     
-    # add a chore
+    # adds a chore
     def add_chore(self):
         new_chore = self.ids.new_chore.text
         self.__chore = new_chore 
@@ -54,55 +60,78 @@ class GoodChoicesChore(Screen):
         print("Chore List", GoodChoicesChore.chore_dict_list)
         self.__index += 1
         print("Chore Index", self.__index)
+    
+    # delete a chore
+    def delete_chore(self):
+        pass
 
 class ChoreListScreen(Screen):
 
-    '''Displays the entire list of chores'''
+    '''Displays the entire list of chores and whether they are completed or not'''
 
+    # creates all the buttons on the screen and displays each chore
     def view_chore_list(self):
-        b = BoxLayout(orientation='vertical',
-                      size=(self.width, self.height),
-                      padding='10dp'
-                      )
-        ChoreListScreen.chore_list_items(self, b)
-        self.add_widget(b)
-
-    def chore_list_items(self, box):
-
         key_list = []
+
+        box_layout = BoxLayout(orientation='vertical',
+                      size=(self.width, self.height),
+                      padding='5dp'
+                    )
+        home_button = Button(text='Home',
+                    size_hint_y=None,
+                    pos_hint={'top': 1}
+                    )
+
+        box_layout.add_widget(home_button)
+        home_button.bind(on_press=self.shift_to_home)
 
         for i in GoodChoicesChore.chore_dict_list:
             for t in i:
                 key_list.append(t)
 
         for i in key_list:
-            b = BoxLayout(orientation='horizontal',
+            chore_box = BoxLayout(orientation='horizontal',
                           size=(self.width, self.height)
                           )
-            d = Button(text="Delete",
+            del_button = Button(text="Delete",
                        size_hint_y=None,
-                       size_hint_x=0.2,
-                       pos_hint={'center_y' : 0.5}
+                       size_hint_x=0.5,
+                       pos_hint={'center_y': 0.1}
                        )
-            l = Label(text=f'{i}',
+            label = Label(text=f'{i}',
                       size_hint_y=None,
-                      pos_hint={'center_y': 0.5}
+                      pos_hint={'center_y': 0.1}
                       )
-            t = ToggleButton(
+            toggle_b = ToggleButton(
                 text="Completed",
                 size_hint_y=None,
-                pos_hint={'center_y': 0.5}
+                pos_hint={'center_y': 0.1}
             )
+            #print("state before: ", toggle_b.state)
 
-            t.bind(on_release=self.completed)
+            toggle_b.bind(on_release=self.completed)
+            del_button.bind(on_release=self.delete_chore)
 
-            b.add_widget(d)
-            b.add_widget(l)
-            b.add_widget(t)
-            box.add_widget(b)
+            chore_box.add_widget(del_button)
+            chore_box.add_widget(label)
+            chore_box.add_widget(toggle_b)
+            box_layout.add_widget(chore_box)
+
+        self.add_widget(box_layout)
     
+    # changes the state of the togglebutton and switches to the celebrate screen
     def completed(self, obj):
-        self.manager.current = 'celebrate'
+        #print("state before: ", obj.state)
+        if obj.state == "down":
+            self.manager.current = "celebrate"
+    
+    # shifts the screen back to home
+    def shift_to_home(self, obj):
+        self.manager.current = "home"
+    
+    # removes the chore from the key_list and calls the delete function from GoodChoicesChore class 
+    def delete_chore(self, obj):
+        pass 
 
 class CelebrateScreen(Screen):
 
@@ -116,7 +145,7 @@ class CelebrateScreen(Screen):
         self.affirm = affirmations[num]
         return self.affirm
 
-    #animate the affirmation statement
+    # animates the affirmation statement
     def animate_it(self, instance):
         Animation.cancel_all(self)
         print("window width", Window.width)
